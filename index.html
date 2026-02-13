@@ -269,31 +269,6 @@
         padding: 8px 2px;
       }
     }
-
-    .fade-update {
-      animation: smoothUpdate 0.9s ease;
-    }
-
-    @keyframes smoothUpdate {
-      0% {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .time-updated {
-      animation: glow 0.9s ease;
-    }
-
-    @keyframes glow {
-      0% { background-color: #e8f0fe; }
-      100% { background-color: transparent; }
-    }
-
   </style>
 </head>
 
@@ -314,18 +289,14 @@
       <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button>
     </div>
 
-    <div id="prayerSection">
-      <div class="glass">
-        <div id="prayerTimes"></div>
-      </div>
-
-      <div class="glass">
-        <button class="btn-secondary btn-display-monthly" onclick="toggleMonthly()" id="monthlyBtn">แสดงทั้งเดือน</button>
-        <div id="monthly" style="display: none;"></div>
-      </div>
+    <div class="glass">
+      <div id="prayerTimes"></div>
     </div>
 
-   
+    <div class="glass">
+      <button class="btn-secondary btn-display-monthly" onclick="toggleMonthly()" id="monthlyBtn">แสดงทั้งเดือน</button>
+      <div id="monthly" style="display: none;"></div>
+    </div>
 
     <div class="content">
       <h2>เวลาละหมาด วันนี้ เช็คเวลาอัปเดตล่าสุดตามพิกัดจริงในประเทศไทย</h2>  
@@ -824,7 +795,6 @@
         currentLang === "th" ? "แสดงเวลาทั้งเดือน" : "Show Monthly Prayer Times";
 
       loadProvinces();
-      animatePrayerSection();
       updateTodayDate();
       loadToday(currentLat, currentLng);
     }
@@ -838,22 +808,6 @@
         m.style.display = "none";
       }
     }
-
-    function animatePrayerSection() {
-      const section = document.getElementById("prayerSection");
-      if (!section) return;
-
-      section.classList.remove("fade-update");
-      void section.offsetWidth; // reset animation
-      section.classList.add("fade-update");
-    }
-
-    document.querySelectorAll(".time-value").forEach(el => {
-      el.classList.remove("time-updated");
-      void el.offsetWidth;
-      el.classList.add("time-updated");
-    });
-
 
     function detectLocation() {
       navigator.geolocation.getCurrentPosition(async pos => {
@@ -915,12 +869,12 @@
           d.data.forEach(x => {
             html += `<tr>
 <td>${x.date.gregorian.date}</td>
-<td class="time-value">${x.timings.Fajr.split(" ")[0]}</td>
-<td class="time-value">${x.timings.Sunrise.split(" ")[0]}</td>
-<td class="time-value">${x.timings.Dhuhr.split(" ")[0]}</td>
-<td class="time-value">${x.timings.Asr.split(" ")[0]}</td>
-<td class="time-value">${x.timings.Maghrib.split(" ")[0]}</td>
-<td class="time-value">${x.timings.Isha.split(" ")[0]}</td>
+<td>${x.timings.Fajr.split(" ")[0]}</td>
+<td>${x.timings.Sunrise.split(" ")[0]}</td>
+<td>${x.timings.Dhuhr.split(" ")[0]}</td>
+<td>${x.timings.Asr.split(" ")[0]}</td>
+<td>${x.timings.Maghrib.split(" ")[0]}</td>
+<td>${x.timings.Isha.split(" ")[0]}</td>
 </tr>`;
           });
           html += "</table>";
@@ -949,14 +903,13 @@
       times.forEach((t, i) => {
         html += `<div class="prayer ${i===nextIndex?"next":""}">
 <div>${prayerNames[currentLang][i]}</div>
-<div class="time-value">${t}</div>
+<div>${t}</div>
 </div>`;
       });
       document.getElementById("prayerTimes").innerHTML = html;
     }
 
     loadProvinces();
-    animatePrayerSection();
     updateTodayDate();
     loadToday(currentLat, currentLng);
     if (navigator.geolocation) {
