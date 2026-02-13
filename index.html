@@ -814,62 +814,89 @@
     LOCATION
   ================================ */
 
-  function detectLocation() {
-  navigator.geolocation.getCurrentPosition(
-    async pos => {
-      state.lat = pos.coords.latitude;
-      state.lng = pos.coords.longitude;
+  function normalizeProvinceName(name) {
+    return (name || "")
+      .toLowerCase()
+      .replace("province", "")
+      .replace("changwat", "")
+      .replace("จังหวัด", "")
+      .trim();
+  }
 
-      // get province name by reverse geocoding
-      let provinceMatch = null;
+  async function detectLocation() {
+    if (!navigator.geolocation) return;
 
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${state.lat}&lon=${state.lng}`
-        );
-        const data = await res.json();
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        try {
+          state.lat = pos.coords.latitude;
+          state.lng = pos.coords.longitude;
 
-        // หา province จาก address
-        const region =
-          data.address.county ||
-          data.address.state ||
-          data.address.region ||
-          data.address.state_district ||
-          "";
+          let provinceMatch = null;
 
-        if (region) {
-          // match กับ list จังหวัดไทย (ภาษาอังกฤษ/ไทย)
-          provinceMatch = provinceCoordinates.find(p =>
-            region.toLowerCase().includes(p.th.toLowerCase()) ||
-            region.toLowerCase().includes(p.en.toLowerCase())
+          // Reverse Geocoding
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${state.lat}&lon=${state.lng}&zoom=10&addressdetails=1`,
+            {
+              headers: {
+                "Accept-Language": "en"
+              }
+            }
           );
+
+          if (!res.ok) throw new Error("Reverse geocoding failed");
+
+          const data = await res.json();
+
+          const rawProvince =
+            data?.address?.province ||
+            data?.address?.state ||
+            data?.address?.region ||
+            "";
+
+          const provinceFromAPI = normalizeProvinceName(rawProvince);
+
+          if (provinceFromAPI) {
+            provinceMatch = provinceCoordinates.find(p => {
+              return (
+                normalizeProvinceName(p.en) === provinceFromAPI ||
+                normalizeProvinceName(p.th) === provinceFromAPI
+              );
+            });
+          }
+
+          // ถ้า match ได้ → set select
+          if (provinceMatch) {
+            select.value = provinceMatch.en;
+
+            // sync lat/lng จาก list จังหวัด (กันคลาดเคลื่อน)
+            state.lat = provinceMatch.lat;
+            state.lng = provinceMatch.lng;
+          }
+
+          // Reset monthly state
+          state.monthlyLoaded = false;
+          monthlyContainer.style.display = "none";
+          btnMonthly.textContent = "แสดงทั้งเดือน";
+
+          showSkeletonToday();
+          showSkeletonMonthly();
+          loadAll();
+
+        } catch (err) {
+          console.warn("Location detection failed:", err);
         }
-      } catch (err) {
-        console.warn("Reverse geocoding failed:", err);
+      },
+      err => {
+        console.log("Location denied or failed");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       }
-
-      // ถ้าหา province เจอ
-      if (provinceMatch) {
-        select.value = provinceMatch.en;
-        // state.manualLocation = true;
-      }
-
-      // โหลดข้อมูลใหม่ตาม lat/lng
-      showSkeletonToday();
-      showSkeletonMonthly();
-
-      loadAll();
-
-      state.monthlyLoaded = false;
-      monthlyContainer.style.display = "none";
-      btnMonthly.textContent = "แสดงทั้งเดือน";
-    },
-    err => {
-      console.log("Location denied or failed");
-    }
-  );
-}
-
+    );
+  }
 
   /* ===============================
     MONTHLY TOGGLE
