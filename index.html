@@ -891,8 +891,13 @@ console.log("CURRENT:", currentLat, currentLng);
     }
 
     function loadToday(lat, lng) {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const dateStr = `${day}-${month}-${year}`;
       console.trace("LOAD TODAY:", lat, lng);
-      fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`)
+      fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lng}&method=3`)
         .then(r => r.json())
         .then(d => {
           currentLat = d.data.meta.latitude;
