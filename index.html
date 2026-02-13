@@ -839,7 +839,7 @@
 
         if (region) {
           // match กับ list จังหวัดไทย (ภาษาอังกฤษ/ไทย)
-          provinceMatch = provinces.find(p =>
+          provinceMatch = provinceCoordinates.find(p =>
             region.toLowerCase().includes(p.th.toLowerCase()) ||
             region.toLowerCase().includes(p.en.toLowerCase())
           );
