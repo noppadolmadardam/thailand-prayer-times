@@ -429,7 +429,6 @@
     let currentLang = "th";
     let currentLat = 13.7563;
     let currentLng = 100.5018;
-    console.log("TOP CURRENT:", currentLat, currentLng);
 
     const provinces = [{
         th: "กรุงเทพมหานคร",
@@ -823,15 +822,14 @@
       loadProvinces();
       updateTodayDate();
       loadToday(currentLat, currentLng);
-      loadMonthly(currentLat, currentLng);
     }
 
-    console.log("MIDDLE CURRENT:", currentLat, currentLng);
-
+console.log("CURRENT:", currentLat, currentLng);
     function toggleMonthly() {
       const m = document.getElementById("monthly");
       if (m.style.display === "none") {
         m.style.display = "block";
+        // loadMonthly(currentLat, currentLng);
       } else {
         m.style.display = "none";
       }
@@ -883,7 +881,7 @@
           currentLat = d.data.meta.latitude;
           currentLng = d.data.meta.longitude;
           displayData(d.data);
-          // loadMonthly(currentLat, currentLng);
+          loadMonthly(currentLat, currentLng);
         });
     }
 
@@ -891,6 +889,7 @@
       fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`)
         .then(r => r.json())
         .then(d => displayData(d.data));
+      loadMonthly(currentLat, currentLng);
     }
 
     function loadMonthly(lat, lng) {
@@ -963,10 +962,9 @@
     select.addEventListener("change", function () {
       const city = this.value;
       fetchByCity(city);
-      loadMonthly(currentLat, currentLng);
     });
     updateTodayDate();
-    // loadToday(currentLat, currentLng);
+    loadToday(currentLat, currentLng);
     if (navigator.geolocation) {
       detectLocation();
     } else {
@@ -974,7 +972,6 @@
     }
     setInterval(updateCurrentTime, 1000);
     updateCurrentTime();
-    console.log("BOTTOM CURRENT:", currentLat, currentLng);
   </script>
 
 </body>
