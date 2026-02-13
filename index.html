@@ -879,7 +879,10 @@
           currentLat = d.data.meta.latitude;
           currentLng = d.data.meta.longitude;
           displayData(d.data);
-          loadMonthly(currentLat, currentLng);
+          const monthlyDiv = document.getElementById("monthly");
+          if (monthlyDiv.style.display === "block") {
+            loadMonthly(currentLat, currentLng);
+          }
         });
     }
 
