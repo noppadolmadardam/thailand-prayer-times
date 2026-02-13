@@ -178,6 +178,18 @@
       text-align: center;
     }
 
+    .current-time {
+      text-align: center;
+      margin: 20px 0 12px;
+      font-size: 16px;
+      color: #000;
+    }
+
+    .current-time small{
+      font-size: 12px;
+      color: var(--sub);
+    }
+
     .countdown {
       font-weight: 700;
       color: var(--primary);
@@ -281,13 +293,14 @@
     <h1 class="title" id="title">เวลาละหมาด วันนี้</h1>
     <div id="todayDate" class="today"></div>
     <div id="hijriDate" class="hijri"></div>
-    <div id="currentTime" class="hijri"></div>
 
     <div class="glass controls">
       <select id="province"></select>
       <button class="btn-secondary btn-position" onclick="detectLocation()">📍 ใช้ตำแหน่งปัจจุบัน</button>
       <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button>
     </div>
+
+    <div id="currentTime" class="current-time"></div>
 
     <div class="glass">
       <div id="prayerTimes"></div>
@@ -744,7 +757,7 @@
       );
 
       document.getElementById("currentTime").innerText =
-        (currentLang === "th" ? "เวลาปัจจุบัน: " : "Current Time: ") + timeStr;
+        (currentLang === "th" ? "<small>เวลาปัจจุบัน</small><br>" : "<small>Current Time</small><br>") + timeStr;
     }
 
     function updateTodayDate() {
@@ -795,6 +808,10 @@
         currentLang === "th" ? "แสดงเวลาทั้งเดือน" : "Show Monthly Prayer Times";
 
       loadProvinces();
+      select.addEventListener("change", function () {
+        const city = this.value;
+        fetchByCity(city);
+      });
       updateTodayDate();
       loadToday(currentLat, currentLng);
     }
@@ -849,7 +866,11 @@
     function fetchByCity(city) {
       fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Thailand&method=3`)
         .then(r => r.json())
-        .then(d => displayData(d.data));
+        .then(d => {
+          currentLat = d.data.meta.latitude;
+          currentLng = d.data.meta.longitude;
+          displayData(d.data);
+        });
     }
 
     function loadToday(lat, lng) {
@@ -884,7 +905,7 @@
 
     function displayData(data) {
       document.getElementById("hijriDate").innerText =
-        (currentLang === "th" ? "ฮิจเราะห์: " : "Hijri: ") +
+        (currentLang === "th" ? "ตรงกับ " : "Hijri: ") +
         data.date.hijri.day + " " + data.date.hijri.month.en + " " + data.date.hijri.year;
 
 
@@ -910,6 +931,10 @@
     }
 
     loadProvinces();
+    select.addEventListener("change", function () {
+      const city = this.value;
+      fetchByCity(city);
+    });
     updateTodayDate();
     loadToday(currentLat, currentLng);
     if (navigator.geolocation) {
