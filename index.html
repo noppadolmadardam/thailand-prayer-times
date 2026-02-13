@@ -476,85 +476,173 @@
     en: ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"]
   };
 
-  const provinces = [
-    { th: "กรุงเทพมหานคร", en: "Bangkok" },
-    { th: "กระบี่", en: "Krabi" },
-    { th: "กาญจนบุรี", en: "Kanchanaburi" },
-    { th: "กาฬสินธุ์", en: "Kalasin" },
-    { th: "กำแพงเพชร", en: "Kamphaeng Phet" },
-    { th: "ขอนแก่น", en: "Khon Kaen" },
-    { th: "จันทบุรี", en: "Chanthaburi" },
-    { th: "ฉะเชิงเทรา", en: "Chachoengsao" },
-    { th: "ชลบุรี", en: "Chonburi" },
-    { th: "ชัยนาท", en: "Chainat" },
-    { th: "ชัยภูมิ", en: "Chaiyaphum" },
-    { th: "ชุมพร", en: "Chumphon" },
-    { th: "เชียงราย", en: "Chiang Rai" },
-    { th: "เชียงใหม่", en: "Chiang Mai" },
-    { th: "ตรัง", en: "Trang" },
-    { th: "ตราด", en: "Trat" },
-    { th: "ตาก", en: "Tak" },
-    { th: "นครนายก", en: "Nakhon Nayok" },
-    { th: "นครปฐม", en: "Nakhon Pathom" },
-    { th: "นครพนม", en: "Nakhon Phanom" },
-    { th: "นครราชสีมา", en: "Nakhon Ratchasima" },
-    { th: "นครศรีธรรมราช", en: "Nakhon Si Thammarat" },
-    { th: "นครสวรรค์", en: "Nakhon Sawan" },
-    { th: "นนทบุรี", en: "Nonthaburi" },
-    { th: "นราธิวาส", en: "Narathiwat" },
-    { th: "น่าน", en: "Nan" },
-    { th: "บึงกาฬ", en: "Bueng Kan" },
-    { th: "บุรีรัมย์", en: "Buriram" },
-    { th: "ปทุมธานี", en: "Pathum Thani" },
-    { th: "ประจวบคีรีขันธ์", en: "Prachuap Khiri Khan" },
-    { th: "ปราจีนบุรี", en: "Prachinburi" },
-    { th: "ปัตตานี", en: "Pattani" },
-    { th: "พระนครศรีอยุธยา", en: "Phra Nakhon Si Ayutthaya" },
-    { th: "พังงา", en: "Phang Nga" },
-    { th: "พัทลุง", en: "Phatthalung" },
-    { th: "พิจิตร", en: "Phichit" },
-    { th: "พิษณุโลก", en: "Phitsanulok" },
-    { th: "เพชรบุรี", en: "Phetchaburi" },
-    { th: "เพชรบูรณ์", en: "Phetchabun" },
-    { th: "แพร่", en: "Phrae" },
-    { th: "พะเยา", en: "Phayao" },
-    { th: "ภูเก็ต", en: "Phuket" },
-    { th: "มหาสารคาม", en: "Maha Sarakham" },
-    { th: "มุกดาหาร", en: "Mukdahan" },
-    { th: "แม่ฮ่องสอน", en: "Mae Hong Son" },
-    { th: "ยโสธร", en: "Yasothon" },
-    { th: "ยะลา", en: "Yala" },
-    { th: "ร้อยเอ็ด", en: "Roi Et" },
-    { th: "ระนอง", en: "Ranong" },
-    { th: "ระยอง", en: "Rayong" },
-    { th: "ราชบุรี", en: "Ratchaburi" },
-    { th: "ลพบุรี", en: "Lopburi" },
-    { th: "ลำปาง", en: "Lampang" },
-    { th: "ลำพูน", en: "Lamphun" },
-    { th: "เลย", en: "Loei" },
-    { th: "ศรีสะเกษ", en: "Si Sa Ket" },
-    { th: "สกลนคร", en: "Sakon Nakhon" },
-    { th: "สงขลา", en: "Songkhla" },
-    { th: "สตูล", en: "Satun" },
-    { th: "สมุทรปราการ", en: "Samut Prakan" },
-    { th: "สมุทรสงคราม", en: "Samut Songkhram" },
-    { th: "สมุทรสาคร", en: "Samut Sakhon" },
-    { th: "สระแก้ว", en: "Sa Kaeo" },
-    { th: "สระบุรี", en: "Saraburi" },
-    { th: "สิงห์บุรี", en: "Sing Buri" },
-    { th: "สุโขทัย", en: "Sukhothai" },
-    { th: "สุพรรณบุรี", en: "Suphan Buri" },
-    { th: "สุราษฎร์ธานี", en: "Surat Thani" },
-    { th: "สุรินทร์", en: "Surin" },
-    { th: "หนองคาย", en: "Nong Khai" },
-    { th: "หนองบัวลำภู", en: "Nong Bua Lamphu" },
-    { th: "อ่างทอง", en: "Ang Thong" },
-    { th: "อุดรธานี", en: "Udon Thani" },
-    { th: "อุตรดิตถ์", en: "Uttaradit" },
-    { th: "อุทัยธานี", en: "Uthai Thani" },
-    { th: "อุบลราชธานี", en: "Ubon Ratchathani" },
-    { th: "อำนาจเจริญ", en: "Amnat Charoen" }
+  const provinceCoordinates = [
+    { th: "กรุงเทพมหานคร", en: "Bangkok", lat: 13.7278956, lng: 100.5241235 },
+    { th: "กระบี่", en: "Krabi", lat: 8.0862997, lng: 98.9062835 },
+    { th: "กาญจนบุรี", en: "Kanchanaburi", lat: 14.0227797, lng: 99.5328115 },
+    { th: "กาฬสินธุ์", en: "Kalasin", lat: 16.4326970, lng: 103.507356 },
+    { th: "กำแพงเพชร", en: "Kamphaeng Phet", lat: 16.482809, lng: 99.516105 },
+    { th: "ขอนแก่น", en: "Khon Kaen", lat: 16.4419355, lng: 102.8359921 },
+    { th: "จันทบุรี", en: "Chanthaburi", lat: 12.611940, lng: 102.103127 },
+    { th: "ฉะเชิงเทรา", en: "Chachoengsao", lat: 13.690463, lng: 101.058804 },
+    { th: "ชลบุรี", en: "Chonburi", lat: 13.361143, lng: 100.984672 },
+    { th: "ชัยนาท", en: "Chainat", lat: 15.180501, lng: 100.123166 },
+    { th: "ชัยภูมิ", en: "Chaiyaphum", lat: 15.810434, lng: 102.032088 },
+    { th: "ชุมพร", en: "Chumphon", lat: 10.485960, lng: 99.181251 },
+    { th: "เชียงราย", en: "Chiang Rai", lat: 19.910602, lng: 99.832595 },
+    { th: "เชียงใหม่", en: "Chiang Mai", lat: 18.706064, lng: 98.981716 },
+    { th: "ตรัง", en: "Trang", lat: 7.564996, lng: 99.611611 },
+    { th: "ตราด", en: "Trat", lat: 12.239903, lng: 102.515693 },
+    { th: "ตาก", en: "Tak", lat: 16.859682, lng: 99.128530 },
+    { th: "นครนายก", en: "Nakhon Nayok", lat: 14.213490, lng: 101.213410 },
+    { th: "นครปฐม", en: "Nakhon Pathom", lat: 13.819501, lng: 100.044327 },
+    { th: "นครพนม", en: "Nakhon Phanom", lat: 17.388564, lng: 104.770193 },
+    { th: "นครราชสีมา", en: "Nakhon Ratchasima", lat: 14.970656, lng: 102.101960 },
+    { th: "นครศรีธรรมราช", en: "Nakhon Si Thammarat", lat: 8.432483, lng: 99.959903 },
+    { th: "นครสวรรค์", en: "Nakhon Sawan", lat: 15.718793, lng: 100.439656 },
+    { th: "นนทบุรี", en: "Nonthaburi", lat: 13.86075, lng: 100.51477 },
+    { th: "นราธิวาส", en: "Narathiwat", lat: 6.425088, lng: 101.825171 },
+    { th: "น่าน", en: "Nan", lat: 18.787747, lng: 100.782662 },
+    { th: "บึงกาฬ", en: "Bueng Kan", lat: 18.359434, lng: 103.638023 },
+    { th: "บุรีรัมย์", en: "Buriram", lat: 14.993695, lng: 102.039528 },
+    { th: "ปทุมธานี", en: "Pathum Thani", lat: 14.021687, lng: 100.525265 },
+    { th: "ประจวบคีรีขันธ์", en: "Prachuap Khiri Khan", lat: 12.395712, lng: 99.898022 },
+    { th: "ปราจีนบุรี", en: "Prachinburi", lat: 14.075753, lng: 101.372658 },
+    { th: "ปัตตานี", en: "Pattani", lat: 6.871567, lng: 101.250108 },
+    { th: "พระนครศรีอยุธยา", en: "Phra Nakhon Si Ayutthaya", lat: 14.353184, lng: 100.568410 },
+    { th: "พังงา", en: "Phang Nga", lat: 8.451300, lng: 98.515185 },
+    { th: "พัทลุง", en: "Phatthalung", lat: 7.617072, lng: 100.080973 },
+    { th: "พิจิตร", en: "Phichit", lat: 16.428934, lng: 100.350611 },
+    { th: "พิษณุโลก", en: "Phitsanulok", lat: 16.829803, lng: 100.261473 },
+    { th: "เพชรบุรี", en: "Phetchaburi", lat: 13.098161, lng: 99.936930 },
+    { th: "เพชรบูรณ์", en: "Phetchabun", lat: 16.431093, lng: 101.158199 },
+    { th: "แพร่", en: "Phrae", lat: 18.143873, lng: 100.140258 },
+    { th: "พะเยา", en: "Phayao", lat: 18.180707, lng: 99.981572 },
+    { th: "ภูเก็ต", en: "Phuket", lat: 7.880445, lng: 98.392341 },
+    { th: "มหาสารคาม", en: "Maha Sarakham", lat: 16.164347, lng: 103.179851 },
+    { th: "มุกดาหาร", en: "Mukdahan", lat: 16.557323, lng: 104.725165 },
+    { th: "แม่ฮ่องสอน", en: "Mae Hong Son", lat: 19.301016, lng: 97.966867 },
+    { th: "ยโสธร", en: "Yasothon", lat: 15.831728, lng: 104.147193 },
+    { th: "ยะลา", en: "Yala", lat: 6.53995, lng: 101.28128 },
+    { th: "ร้อยเอ็ด", en: "Roi Et", lat: 16.056485, lng: 103.652623 },
+    { th: "ระนอง", en: "Ranong", lat: 9.964187, lng: 98.634041 },
+    { th: "ระยอง", en: "Rayong", lat: 12.680326, lng: 101.281626 },
+    { th: "ราชบุรี", en: "Ratchaburi", lat: 13.536547, lng: 99.813780 },
+    { th: "ลพบุรี", en: "Lopburi", lat: 14.799611, lng: 100.653225 },
+    { th: "ลำปาง", en: "Lampang", lat: 18.285539, lng: 99.512790 },
+    { th: "ลำพูน", en: "Lamphun", lat: 18.504962, lng: 99.014816 },
+    { th: "เลย", en: "Loei", lat: 17.491438, lng: 101.721243 },
+    { th: "ศรีสะเกษ", en: "Si Sa Ket", lat: 15.117445, lng: 104.334413 },
+    { th: "สกลนคร", en: "Sakon Nakhon", lat: 17.167339, lng: 104.145683 },
+    { th: "สงขลา", en: "Songkhla", lat: 7.199946, lng: 100.600600 },
+    { th: "สตูล", en: "Satun", lat: 6.623425, lng: 99.935514 },
+    { th: "สมุทรปราการ", en: "Samut Prakan", lat: 13.599083, lng: 100.599835 },
+    { th: "สมุทรสาคร", en: "Samut Sakhon", lat: 13.532337, lng: 100.273571 },
+    { th: "สมุทรสงคราม", en: "Samut Songkhram", lat: 13.426508, lng: 100.009324 },
+    { th: "สระแก้ว", en: "Sa Kaeo", lat: 13.690722, lng: 102.097444 },
+    { th: "สระบุรี", en: "Saraburi", lat: 14.017667, lng: 100.916383 },
+    { th: "สิงห์บุรี", en: "Sing Buri", lat: 14.896544, lng: 100.400642 },
+    { th: "สุโขทัย", en: "Sukhothai", lat: 17.238620, lng: 99.822655 },
+    { th: "สุพรรณบุรี", en: "Suphan Buri", lat: 14.474334, lng: 100.114714 },
+    { th: "สุราษฎร์ธานี", en: "Surat Thani", lat: 9.14011, lng: 99.33311 },
+    { th: "สุรินทร์", en: "Surin", lat: 14.882073, lng: 103.493373 },
+    { th: "หนองคาย", en: "Nong Khai", lat: 17.878414, lng: 102.743141 },
+    { th: "หนองบัวลำภู", en: "Nong Bua Lamphu", lat: 17.517303, lng: 102.405918 },
+    { th: "อ่างทอง", en: "Ang Thong", lat: 14.577737, lng: 100.450774 },
+    { th: "อุดรธานี", en: "Udon Thani", lat: 17.413841, lng: 102.787233 },
+    { th: "อุตรดิตถ์", en: "Uttaradit", lat: 17.626803, lng: 100.095198 },
+    { th: "อุทัยธานี", en: "Uthai Thani", lat: 15.375461, lng: 100.124403 },
+    { th: "อุบลราชธานี", en: "Ubon Ratchathani", lat: 15.244845, lng: 104.847299 },
+    { th: "อำนาจเจริญ", en: "Amnat Charoen", lat: 15.825124, lng: 104.624516 }
   ];
+
+  // const provinces = [
+  //   { th: "กรุงเทพมหานคร", en: "Bangkok" },
+  //   { th: "กระบี่", en: "Krabi" },
+  //   { th: "กาญจนบุรี", en: "Kanchanaburi" },
+  //   { th: "กาฬสินธุ์", en: "Kalasin" },
+  //   { th: "กำแพงเพชร", en: "Kamphaeng Phet" },
+  //   { th: "ขอนแก่น", en: "Khon Kaen" },
+  //   { th: "จันทบุรี", en: "Chanthaburi" },
+  //   { th: "ฉะเชิงเทรา", en: "Chachoengsao" },
+  //   { th: "ชลบุรี", en: "Chonburi" },
+  //   { th: "ชัยนาท", en: "Chainat" },
+  //   { th: "ชัยภูมิ", en: "Chaiyaphum" },
+  //   { th: "ชุมพร", en: "Chumphon" },
+  //   { th: "เชียงราย", en: "Chiang Rai" },
+  //   { th: "เชียงใหม่", en: "Chiang Mai" },
+  //   { th: "ตรัง", en: "Trang" },
+  //   { th: "ตราด", en: "Trat" },
+  //   { th: "ตาก", en: "Tak" },
+  //   { th: "นครนายก", en: "Nakhon Nayok" },
+  //   { th: "นครปฐม", en: "Nakhon Pathom" },
+  //   { th: "นครพนม", en: "Nakhon Phanom" },
+  //   { th: "นครราชสีมา", en: "Nakhon Ratchasima" },
+  //   { th: "นครศรีธรรมราช", en: "Nakhon Si Thammarat" },
+  //   { th: "นครสวรรค์", en: "Nakhon Sawan" },
+  //   { th: "นนทบุรี", en: "Nonthaburi" },
+  //   { th: "นราธิวาส", en: "Narathiwat" },
+  //   { th: "น่าน", en: "Nan" },
+  //   { th: "บึงกาฬ", en: "Bueng Kan" },
+  //   { th: "บุรีรัมย์", en: "Buriram" },
+  //   { th: "ปทุมธานี", en: "Pathum Thani" },
+  //   { th: "ประจวบคีรีขันธ์", en: "Prachuap Khiri Khan" },
+  //   { th: "ปราจีนบุรี", en: "Prachinburi" },
+  //   { th: "ปัตตานี", en: "Pattani" },
+  //   { th: "พระนครศรีอยุธยา", en: "Phra Nakhon Si Ayutthaya" },
+  //   { th: "พังงา", en: "Phang Nga" },
+  //   { th: "พัทลุง", en: "Phatthalung" },
+  //   { th: "พิจิตร", en: "Phichit" },
+  //   { th: "พิษณุโลก", en: "Phitsanulok" },
+  //   { th: "เพชรบุรี", en: "Phetchaburi" },
+  //   { th: "เพชรบูรณ์", en: "Phetchabun" },
+  //   { th: "แพร่", en: "Phrae" },
+  //   { th: "พะเยา", en: "Phayao" },
+  //   { th: "ภูเก็ต", en: "Phuket" },
+  //   { th: "มหาสารคาม", en: "Maha Sarakham" },
+  //   { th: "มุกดาหาร", en: "Mukdahan" },
+  //   { th: "แม่ฮ่องสอน", en: "Mae Hong Son" },
+  //   { th: "ยโสธร", en: "Yasothon" },
+  //   { th: "ยะลา", en: "Yala" },
+  //   { th: "ร้อยเอ็ด", en: "Roi Et" },
+  //   { th: "ระนอง", en: "Ranong" },
+  //   { th: "ระยอง", en: "Rayong" },
+  //   { th: "ราชบุรี", en: "Ratchaburi" },
+  //   { th: "ลพบุรี", en: "Lopburi" },
+  //   { th: "ลำปาง", en: "Lampang" },
+  //   { th: "ลำพูน", en: "Lamphun" },
+  //   { th: "เลย", en: "Loei" },
+  //   { th: "ศรีสะเกษ", en: "Si Sa Ket" },
+  //   { th: "สกลนคร", en: "Sakon Nakhon" },
+  //   { th: "สงขลา", en: "Songkhla" },
+  //   { th: "สตูล", en: "Satun" },
+  //   { th: "สมุทรปราการ", en: "Samut Prakan" },
+  //   { th: "สมุทรสงคราม", en: "Samut Songkhram" },
+  //   { th: "สมุทรสาคร", en: "Samut Sakhon" },
+  //   { th: "สระแก้ว", en: "Sa Kaeo" },
+  //   { th: "สระบุรี", en: "Saraburi" },
+  //   { th: "สิงห์บุรี", en: "Sing Buri" },
+  //   { th: "สุโขทัย", en: "Sukhothai" },
+  //   { th: "สุพรรณบุรี", en: "Suphan Buri" },
+  //   { th: "สุราษฎร์ธานี", en: "Surat Thani" },
+  //   { th: "สุรินทร์", en: "Surin" },
+  //   { th: "หนองคาย", en: "Nong Khai" },
+  //   { th: "หนองบัวลำภู", en: "Nong Bua Lamphu" },
+  //   { th: "อ่างทอง", en: "Ang Thong" },
+  //   { th: "อุดรธานี", en: "Udon Thani" },
+  //   { th: "อุตรดิตถ์", en: "Uttaradit" },
+  //   { th: "อุทัยธานี", en: "Uthai Thani" },
+  //   { th: "อุบลราชธานี", en: "Ubon Ratchathani" },
+  //   { th: "อำนาจเจริญ", en: "Amnat Charoen" }
+  // ];
+
+  function getLatLngFromProvince(provinceEn) {
+    const found = provinceCoordinates.find(p => p.en === provinceEn);
+    // ถ้าไม่เจอ จะ fallback ไปที่ state ปัจจุบัน
+    return found
+      ? { lat: found.lat, lng: found.lng }
+      : { lat: state.lat, lng: state.lng };
+  }
 
   const select = document.getElementById("province");
 
@@ -710,7 +798,7 @@
       const today = await fetchToday(state.lat, state.lng);
       renderToday(today);
 
-      // reset monthly state
+      // รีเซ็ต monthly
       state.monthlyLoaded = false;
       monthlyContainer.style.display = "none";
       btnMonthly.textContent = "แสดงทั้งเดือน";
@@ -783,27 +871,33 @@
     CITY SELECT
   ================================ */
 
-  async function fetchByCity(city) {
-    state.manualLocation = true;
+  // async function fetchByCity(city) {
+  //   state.manualLocation = true;
 
-    showSkeletonToday();
+  //   showSkeletonToday();
 
-    const todayRes = await fetch(
-      `https://api.aladhan.com/v1/timingsByCity/${todayString()}?city=${city}&country=Thailand&method=3`
-    );
-    const todayJson = await todayRes.json();
+  //   const todayRes = await fetch(
+  //     `https://api.aladhan.com/v1/timingsByCity/${todayString()}?city=${city}&country=Thailand&method=3`
+  //   );
+  //   const todayJson = await todayRes.json();
 
-    renderToday(todayJson.data);
+  //   renderToday(todayJson.data);
 
-    // reset monthly
-    state.monthlyLoaded = false;
-    monthlyContainer.style.display = "none";
-    btnMonthly.textContent = "แสดงทั้งเดือน";
-  }
+  //   // reset monthly
+  //   state.monthlyLoaded = false;
+  //   monthlyContainer.style.display = "none";
+  //   btnMonthly.textContent = "แสดงทั้งเดือน";
+  // }
 
-  select.addEventListener("change", function(){
-    fetchByCity(this.value);
-  });
+ select.addEventListener("change", function () {
+  const { lat, lng } = getLatLngFromProvince(this.value);
+
+  state.manualLocation = true;
+  state.lat = lat;      // update lat
+  state.lng = lng;      // update lng
+
+  loadAll(); // load today & reset monthly
+});
 
   /* ===============================
     INIT
