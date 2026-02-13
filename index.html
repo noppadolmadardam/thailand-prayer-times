@@ -338,7 +338,8 @@
     <div class="glass controls">
       <select id="province"></select>
       <button class="btn-secondary btn-position" onclick="detectLocation()">📍 ใช้ตำแหน่งปัจจุบัน</button>
-      <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button>
+      <!-- <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button> -->
+      <button class="btn-secondary" id="btnLang">🇬🇧 English</button>
     </div>
 
     <div id="currentTime" class="current-time">
@@ -645,6 +646,29 @@
   }
 
   const select = document.getElementById("province");
+
+  function toggleLang() {
+    state.lang = state.lang === "th" ? "en" : "th";
+
+    // เปลี่ยนข้อความปุ่ม
+    btnLang.textContent = state.lang === "th" ? "EN" : "TH";
+
+    // รีโหลดข้อมูลใหม่
+    showSkeletonToday();
+    showSkeletonMonthly();
+
+    loadAll();
+
+    // reset monthly view
+    state.monthlyLoaded = false;
+    monthlyContainer.style.display = "none";
+    btnMonthly.textContent =
+      state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
+  }
+
+  const btnLang = document.getElementById("btnLang");
+
+  btnLang.addEventListener("click", toggleLang);
 
   function showSkeletonToday() {
   let html = "";
