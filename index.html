@@ -204,7 +204,7 @@
     .prayer {
       display: flex;
       justify-content: space-between;
-      padding: 14px 0;
+      padding: 14px 20px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       font-size: 20px;
     }
@@ -216,7 +216,7 @@
     .next {
       color: var(--primary);
       font-weight: 900;
-      font-size: 22px;
+      font-size: 26px;
     }
 
     #monthly {
@@ -329,7 +329,9 @@
 
   <div class="container">
      <div class="logo">
-      <img src="/favicon.png" alt="เวลาละหมาด วันนี้ - Thailand Prayer Times">
+      <a href="https://thailand-prayer-times.vercel.app">
+        <img src="/favicon.png" alt="เวลาละหมาด วันนี้ - Thailand Prayer Times">
+      </a>
     </div>
     <h1 class="title" id="title">เวลาละหมาด วันนี้</h1>
     <div id="todayDate" class="today"></div>
@@ -338,7 +340,6 @@
     <div class="glass controls">
       <select id="province"></select>
       <button class="btn-secondary btn-position" onclick="detectLocation()">📍 ใช้ตำแหน่งปัจจุบัน</button>
-      <!-- <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button> -->
       <button class="btn-secondary" id="btnLang">🇬🇧 English</button>
     </div>
 
@@ -473,7 +474,7 @@
   };
 
   const prayerNames = {
-    th: ["ซุบฮิ", "อาทิตย์ขึ้น", "ดุห์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
+    th: ["ซุบฮิ", "อาทิตย์ขึ้น", "ซุฮ์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
     en: ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"]
   };
 
@@ -557,86 +558,6 @@
     { th: "อำนาจเจริญ", en: "Amnat Charoen", lat: 15.825124, lng: 104.624516 }
   ];
 
-  // const provinces = [
-  //   { th: "กรุงเทพมหานคร", en: "Bangkok" },
-  //   { th: "กระบี่", en: "Krabi" },
-  //   { th: "กาญจนบุรี", en: "Kanchanaburi" },
-  //   { th: "กาฬสินธุ์", en: "Kalasin" },
-  //   { th: "กำแพงเพชร", en: "Kamphaeng Phet" },
-  //   { th: "ขอนแก่น", en: "Khon Kaen" },
-  //   { th: "จันทบุรี", en: "Chanthaburi" },
-  //   { th: "ฉะเชิงเทรา", en: "Chachoengsao" },
-  //   { th: "ชลบุรี", en: "Chonburi" },
-  //   { th: "ชัยนาท", en: "Chainat" },
-  //   { th: "ชัยภูมิ", en: "Chaiyaphum" },
-  //   { th: "ชุมพร", en: "Chumphon" },
-  //   { th: "เชียงราย", en: "Chiang Rai" },
-  //   { th: "เชียงใหม่", en: "Chiang Mai" },
-  //   { th: "ตรัง", en: "Trang" },
-  //   { th: "ตราด", en: "Trat" },
-  //   { th: "ตาก", en: "Tak" },
-  //   { th: "นครนายก", en: "Nakhon Nayok" },
-  //   { th: "นครปฐม", en: "Nakhon Pathom" },
-  //   { th: "นครพนม", en: "Nakhon Phanom" },
-  //   { th: "นครราชสีมา", en: "Nakhon Ratchasima" },
-  //   { th: "นครศรีธรรมราช", en: "Nakhon Si Thammarat" },
-  //   { th: "นครสวรรค์", en: "Nakhon Sawan" },
-  //   { th: "นนทบุรี", en: "Nonthaburi" },
-  //   { th: "นราธิวาส", en: "Narathiwat" },
-  //   { th: "น่าน", en: "Nan" },
-  //   { th: "บึงกาฬ", en: "Bueng Kan" },
-  //   { th: "บุรีรัมย์", en: "Buriram" },
-  //   { th: "ปทุมธานี", en: "Pathum Thani" },
-  //   { th: "ประจวบคีรีขันธ์", en: "Prachuap Khiri Khan" },
-  //   { th: "ปราจีนบุรี", en: "Prachinburi" },
-  //   { th: "ปัตตานี", en: "Pattani" },
-  //   { th: "พระนครศรีอยุธยา", en: "Phra Nakhon Si Ayutthaya" },
-  //   { th: "พังงา", en: "Phang Nga" },
-  //   { th: "พัทลุง", en: "Phatthalung" },
-  //   { th: "พิจิตร", en: "Phichit" },
-  //   { th: "พิษณุโลก", en: "Phitsanulok" },
-  //   { th: "เพชรบุรี", en: "Phetchaburi" },
-  //   { th: "เพชรบูรณ์", en: "Phetchabun" },
-  //   { th: "แพร่", en: "Phrae" },
-  //   { th: "พะเยา", en: "Phayao" },
-  //   { th: "ภูเก็ต", en: "Phuket" },
-  //   { th: "มหาสารคาม", en: "Maha Sarakham" },
-  //   { th: "มุกดาหาร", en: "Mukdahan" },
-  //   { th: "แม่ฮ่องสอน", en: "Mae Hong Son" },
-  //   { th: "ยโสธร", en: "Yasothon" },
-  //   { th: "ยะลา", en: "Yala" },
-  //   { th: "ร้อยเอ็ด", en: "Roi Et" },
-  //   { th: "ระนอง", en: "Ranong" },
-  //   { th: "ระยอง", en: "Rayong" },
-  //   { th: "ราชบุรี", en: "Ratchaburi" },
-  //   { th: "ลพบุรี", en: "Lopburi" },
-  //   { th: "ลำปาง", en: "Lampang" },
-  //   { th: "ลำพูน", en: "Lamphun" },
-  //   { th: "เลย", en: "Loei" },
-  //   { th: "ศรีสะเกษ", en: "Si Sa Ket" },
-  //   { th: "สกลนคร", en: "Sakon Nakhon" },
-  //   { th: "สงขลา", en: "Songkhla" },
-  //   { th: "สตูล", en: "Satun" },
-  //   { th: "สมุทรปราการ", en: "Samut Prakan" },
-  //   { th: "สมุทรสงคราม", en: "Samut Songkhram" },
-  //   { th: "สมุทรสาคร", en: "Samut Sakhon" },
-  //   { th: "สระแก้ว", en: "Sa Kaeo" },
-  //   { th: "สระบุรี", en: "Saraburi" },
-  //   { th: "สิงห์บุรี", en: "Sing Buri" },
-  //   { th: "สุโขทัย", en: "Sukhothai" },
-  //   { th: "สุพรรณบุรี", en: "Suphan Buri" },
-  //   { th: "สุราษฎร์ธานี", en: "Surat Thani" },
-  //   { th: "สุรินทร์", en: "Surin" },
-  //   { th: "หนองคาย", en: "Nong Khai" },
-  //   { th: "หนองบัวลำภู", en: "Nong Bua Lamphu" },
-  //   { th: "อ่างทอง", en: "Ang Thong" },
-  //   { th: "อุดรธานี", en: "Udon Thani" },
-  //   { th: "อุตรดิตถ์", en: "Uttaradit" },
-  //   { th: "อุทัยธานี", en: "Uthai Thani" },
-  //   { th: "อุบลราชธานี", en: "Ubon Ratchathani" },
-  //   { th: "อำนาจเจริญ", en: "Amnat Charoen" }
-  // ];
-
   function getLatLngFromProvince(provinceEn) {
     const found = provinceCoordinates.find(p => p.en === provinceEn);
     // ถ้าไม่เจอ จะ fallback ไปที่ state ปัจจุบัน
@@ -647,23 +568,36 @@
 
   const select = document.getElementById("province");
 
+  function updateCurrentTime() { 
+    const now = new Date(); 
+    const timeStr = now.toLocaleTimeString( 
+      state.lang === "th" ? "th-TH" : "en-US", 
+      { hour: "2-digit", minute: "2-digit", second: "2-digit" } 
+    ); 
+    document.getElementById("timeLabel").innerText = state.lang === "th" ? "เวลาปัจจุบัน" : "Current Time"; 
+    document.getElementById("timeValue").innerText = timeStr; 
+  }
+
   function toggleLang() {
     state.lang = state.lang === "th" ? "en" : "th";
 
     // เปลี่ยนข้อความปุ่ม
-    btnLang.textContent = state.lang === "th" ? "EN" : "TH";
+    btnLang.textContent = state.lang === "th" ? "🇬🇧 English" : "🇹🇭 ไทย";
+    btnMonthly.textContent = state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
+    document.getElementById("title").innerText= state.lang === "th "?"เวลาละหมาดวันนี้":"Today's Prayer Times"; 
+    document.querySelector(".btn-position").innerText = state.lang === "th" ? "📍 ใช้ตำแหน่งปัจจุบัน" : "📍 Use Current Location";
 
     // รีโหลดข้อมูลใหม่
     showSkeletonToday();
     showSkeletonMonthly();
 
+    loadProvinces();
     loadAll();
 
     // reset monthly view
     state.monthlyLoaded = false;
     monthlyContainer.style.display = "none";
-    btnMonthly.textContent =
-      state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
+    
   }
 
   const btnLang = document.getElementById("btnLang");
@@ -748,7 +682,7 @@
 
   function renderToday(data) {
     document.getElementById("hijriDate").innerText =
-      (state.lang === "th" ? "ตรงกับ " : "Hijri: ") +
+      (state.lang === "th" ? "ตรงกับ " : "On ") +
       `${data.date.hijri.day} ${data.date.hijri.month.en} ${data.date.hijri.year}`;
 
     const times = [
@@ -785,13 +719,13 @@
   function renderMonthly(data) {
     let html = `<table>
     <tr>
-      <th>Date</th>
-      <th>Fajr</th>
-      <th>Sunrise</th>
-      <th>Dhuhr</th>
-      <th>Asr</th>
-      <th>Maghrib</th>
-      <th>Isha</th>
+      <th>วันที่<br>Date</th>
+      <th>ซุบฮิ<br>Fajr</th>
+      <th>อาทิตย์ขึ้น<br>Sunrise</th>
+      <th>ซุฮ์รี<br>Dhuhr</th>
+      <th>อัสรี<br>Asr</th>
+      <th>มัฆริบ<br>Maghrib</th>
+      <th>อีชา<br>Isha</th>
     </tr>`;
 
     data.forEach(d=>{
@@ -825,14 +759,13 @@
       // รีเซ็ต monthly
       state.monthlyLoaded = false;
       monthlyContainer.style.display = "none";
-      btnMonthly.textContent = "แสดงทั้งเดือน";
+      // btnMonthly.textContent = "แสดงทั้งเดือน";
+      btnMonthly.textContent = state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
 
     } catch (err) {
       console.error("Load error:", err);
     }
   }
-
-
 
   /* ===============================
     LOCATION
@@ -901,7 +834,7 @@
           // Reset monthly state
           state.monthlyLoaded = false;
           monthlyContainer.style.display = "none";
-          btnMonthly.textContent = "แสดงทั้งเดือน";
+          btnMonthly.textContent = state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
 
           showSkeletonToday();
           showSkeletonMonthly();
@@ -935,7 +868,7 @@
 
     if (isHidden) {
       monthlyContainer.style.display = "block";
-      btnMonthly.textContent = "ซ่อนตารางรายเดือน";
+      btnMonthly.textContent = state.lang === "th" ? "ซ่อนตารางรายเดือน" : "Hide Monthly";
 
       if (!state.monthlyLoaded) {
         showSkeletonMonthly();
@@ -946,31 +879,13 @@
 
     } else {
       monthlyContainer.style.display = "none";
-      btnMonthly.textContent = "แสดงทั้งเดือน";
+      btnMonthly.textContent = state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
     }
   });
 
   /* ===============================
     CITY SELECT
   ================================ */
-
-  // async function fetchByCity(city) {
-  //   state.manualLocation = true;
-
-  //   showSkeletonToday();
-
-  //   const todayRes = await fetch(
-  //     `https://api.aladhan.com/v1/timingsByCity/${todayString()}?city=${city}&country=Thailand&method=3`
-  //   );
-  //   const todayJson = await todayRes.json();
-
-  //   renderToday(todayJson.data);
-
-  //   // reset monthly
-  //   state.monthlyLoaded = false;
-  //   monthlyContainer.style.display = "none";
-  //   btnMonthly.textContent = "แสดงทั้งเดือน";
-  // }
 
  select.addEventListener("change", function () {
   const { lat, lng } = getLatLngFromProvince(this.value);
@@ -991,6 +906,8 @@
     loadProvinces();
     select.value = "Bangkok";
     loadAll();
+    setInterval(updateCurrentTime, 1000); 
+    updateCurrentTime();
 
     if (navigator.geolocation) {
       detectLocation();
@@ -1000,7 +917,5 @@
   init();
 </script>
 
-
 </body>
-
 </html>
