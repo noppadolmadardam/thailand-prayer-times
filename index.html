@@ -815,29 +815,61 @@
   ================================ */
 
   function detectLocation() {
-    // if (state.manualLocation) return;
+  navigator.geolocation.getCurrentPosition(
+    async pos => {
+      state.lat = pos.coords.latitude;
+      state.lng = pos.coords.longitude;
 
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        state.lat = pos.coords.latitude;
-        state.lng = pos.coords.longitude;
+      // get province name by reverse geocoding
+      let provinceMatch = null;
 
-        // state.manualLocation = false;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${state.lat}&lon=${state.lng}`
+        );
+        const data = await res.json();
 
-        showSkeletonToday();
-        showSkeletonMonthly();
-        loadAll();
+        // หา province จาก address
+        const region =
+          data.address.county ||
+          data.address.state ||
+          data.address.region ||
+          data.address.state_district ||
+          "";
 
-        state.monthlyLoaded = false;
-        monthlyContainer.style.display = "none";
-        btnMonthly.textContent = "แสดงทั้งเดือน";
-      },
-      err => {
-        console.log("Location denied or failed");
-        // ไม่ต้องทำอะไร ปล่อย Bangkok ต่อไป
+        if (region) {
+          // match กับ list จังหวัดไทย (ภาษาอังกฤษ/ไทย)
+          provinceMatch = provinces.find(p =>
+            region.toLowerCase().includes(p.th.toLowerCase()) ||
+            region.toLowerCase().includes(p.en.toLowerCase())
+          );
+        }
+      } catch (err) {
+        console.warn("Reverse geocoding failed:", err);
       }
-    );
-  }
+
+      // ถ้าหา province เจอ
+      if (provinceMatch) {
+        select.value = provinceMatch.en;
+        // state.manualLocation = true;
+      }
+
+      // โหลดข้อมูลใหม่ตาม lat/lng
+      showSkeletonToday();
+      showSkeletonMonthly();
+
+      loadAll();
+
+      state.monthlyLoaded = false;
+      monthlyContainer.style.display = "none";
+      btnMonthly.textContent = "แสดงทั้งเดือน";
+    },
+    err => {
+      console.log("Location denied or failed");
+    }
+  );
+}
+
 
   /* ===============================
     MONTHLY TOGGLE
