@@ -352,7 +352,7 @@
     </div>
 
     <div class="glass">
-      <button class="btn-secondary btn-display-monthly" onclick="toggleMonthly()" id="monthlyBtn">แสดงทั้งเดือน</button>
+      <button class="btn-secondary btn-display-monthly" id="btnMonthly">แสดงทั้งเดือน</button>
       <div id="monthly" style="display: none;"></div>
     </div>
 
@@ -467,7 +467,8 @@
     lat: 13.7563,
     lng: 100.5018,
     manualLocation: false,
-    defaultCity: "Bangkok"
+    defaultCity: "Bangkok",
+    monthlyLoaded: false
   };
 
   const prayerNames = {
@@ -705,18 +706,20 @@
   async function loadAll() {
     try {
       showSkeletonToday();
-      showSkeletonMonthly();
 
       const today = await fetchToday(state.lat, state.lng);
       renderToday(today);
 
-      const monthly = await fetchMonthly(state.lat, state.lng);
-      renderMonthly(monthly);
+      // reset monthly state
+      state.monthlyLoaded = false;
+      monthlyContainer.style.display = "none";
+      btnMonthly.textContent = "แสดงทั้งเดือน";
 
     } catch (err) {
       console.error("Load error:", err);
     }
   }
+
 
 
   /* ===============================
@@ -736,6 +739,10 @@
         showSkeletonToday();
         showSkeletonMonthly();
         loadAll();
+
+        state.monthlyLoaded = false;
+        monthlyContainer.style.display = "none";
+        btnMonthly.textContent = "แสดงทั้งเดือน";
       },
       err => {
         console.log("Location denied or failed");
@@ -744,6 +751,33 @@
     );
   }
 
+  /* ===============================
+    MONTHLY TOGGLE
+  ================================ */
+
+  const monthlyContainer = document.getElementById("monthly");
+  const btnMonthly = document.getElementById("btnMonthly");
+
+  btnMonthly.addEventListener("click", async () => {
+    // toggle show / hide
+    const isHidden = monthlyContainer.style.display === "none";
+
+    if (isHidden) {
+      monthlyContainer.style.display = "block";
+      btnMonthly.textContent = "ซ่อนตารางรายเดือน";
+
+      if (!state.monthlyLoaded) {
+        showSkeletonMonthly();
+        const monthly = await fetchMonthly(state.lat, state.lng);
+        renderMonthly(monthly);
+        state.monthlyLoaded = true;
+      }
+
+    } else {
+      monthlyContainer.style.display = "none";
+      btnMonthly.textContent = "แสดงทั้งเดือน";
+    }
+  });
 
   /* ===============================
     CITY SELECT
@@ -753,19 +787,19 @@
     state.manualLocation = true;
 
     showSkeletonToday();
-    showSkeletonMonthly();
 
-    const res = await fetch(
+    const todayRes = await fetch(
       `https://api.aladhan.com/v1/timingsByCity/${todayString()}?city=${city}&country=Thailand&method=3`
     );
-    const json = await res.json();
+    const todayJson = await todayRes.json();
 
-    renderToday(json.data);
+    renderToday(todayJson.data);
 
-    const monthly = await fetchMonthly(state.lat, state.lng);
-    renderMonthly(monthly);
+    // reset monthly
+    state.monthlyLoaded = false;
+    monthlyContainer.style.display = "none";
+    btnMonthly.textContent = "แสดงทั้งเดือน";
   }
-
 
   select.addEventListener("change", function(){
     fetchByCity(this.value);
@@ -776,17 +810,17 @@
   ================================ */
 
   function init() {
-    loadProvinces();             
-    select.value = "Bangkok";    
-    loadAll();                   
+    state.monthlyLoaded = false;
+    loadProvinces();
+    select.value = "Bangkok";
+    loadAll();
 
     if (navigator.geolocation) {
-      detectLocation();          
+      detectLocation();
     }
   }
 
   init();
-
 </script>
 
 
