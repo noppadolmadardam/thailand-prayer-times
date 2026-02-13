@@ -840,6 +840,7 @@
         currentLng = pos.coords.longitude;
 
         loadToday(currentLat, currentLng);
+        loadMonthly(currentLat, currentLng);
 
         // Reverse Geocoding
         try {
@@ -894,26 +895,38 @@
 
     function loadMonthly(lat, lng) {
       const now = new Date();
+      const month = now.getMonth() + 1;
+      const year = now.getFullYear();
+
       fetch(
-          `https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lng}&method=3&month=${now.getMonth()+1}&year=${now.getFullYear()}`
-        )
+        `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lng}&method=3`
+      )
         .then(r => r.json())
         .then(d => {
+
+          if (!d.data) {
+            console.error("API error:", d);
+            return;
+          }
+
           let html = "<table><tr><th>วันที่<br>Date</th><th>ซุบฮี<br>Fajr</th><th>อาทิตย์ขึ้น<br>Sunrise</th><th>ดุห์รี<br>Dhuhr</th><th>อัสรี<br>Asr</th><th>มัฆริบ<br>Maghrib</th><th>อิชาอ์<br>Isha</th></tr>";
+
           d.data.forEach(x => {
             html += `<tr>
-<td>${x.date.gregorian.date}</td>
-<td>${x.timings.Fajr.split(" ")[0]}</td>
-<td>${x.timings.Sunrise.split(" ")[0]}</td>
-<td>${x.timings.Dhuhr.split(" ")[0]}</td>
-<td>${x.timings.Asr.split(" ")[0]}</td>
-<td>${x.timings.Maghrib.split(" ")[0]}</td>
-<td>${x.timings.Isha.split(" ")[0]}</td>
-</tr>`;
+    <td>${x.date.gregorian.date}</td>
+    <td>${x.timings.Fajr.split(" ")[0]}</td>
+    <td>${x.timings.Sunrise.split(" ")[0]}</td>
+    <td>${x.timings.Dhuhr.split(" ")[0]}</td>
+    <td>${x.timings.Asr.split(" ")[0]}</td>
+    <td>${x.timings.Maghrib.split(" ")[0]}</td>
+    <td>${x.timings.Isha.split(" ")[0]}</td>
+    </tr>`;
           });
+
           html += "</table>";
           document.getElementById("monthly").innerHTML = html;
-        });
+        })
+        .catch(err => console.error("Fetch failed:", err));
     }
 
     function displayData(data) {
