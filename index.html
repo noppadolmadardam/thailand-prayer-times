@@ -243,7 +243,7 @@
       object-fit: contain;
     }
 
-    @media(min-width:600px) {
+    @media(min-width:620px) {
       .controls {
         flex-direction: row;
       }
@@ -260,6 +260,40 @@
         flex: 1;
       }
     }
+
+    @media(max-width:619px) {
+      .container {
+        padding: 12px;
+      }
+      td {
+        padding: 8px 2px;
+      }
+    }
+
+    .fade-update {
+      animation: smoothUpdate 0.5s ease;
+    }
+
+    @keyframes smoothUpdate {
+      0% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .time-updated {
+      animation: glow 0.8s ease;
+    }
+
+    @keyframes glow {
+      0% { background-color: #e8f0fe; }
+      100% { background-color: transparent; }
+    }
+
   </style>
 </head>
 
@@ -272,6 +306,7 @@
     <h1 class="title" id="title">เวลาละหมาด วันนี้</h1>
     <div id="todayDate" class="today"></div>
     <div id="hijriDate" class="hijri"></div>
+    <div id="currentTime" class="hijri"></div>
 
     <div class="glass controls">
       <select id="province"></select>
@@ -279,14 +314,18 @@
       <button class="btn-secondary" onclick="toggleLang()" id="langBtn">🇬🇧 English</button>
     </div>
 
-    <div class="glass">
-      <div id="prayerTimes"></div>
+    <div id="prayerSection">
+      <div class="glass">
+        <div id="prayerTimes"></div>
+      </div>
+
+      <div class="glass">
+        <button class="btn-secondary btn-display-monthly" onclick="toggleMonthly()" id="monthlyBtn">แสดงทั้งเดือน</button>
+        <div id="monthly" style="display: none;"></div>
+      </div>
     </div>
 
-    <div class="glass">
-      <button class="btn-secondary btn-display-monthly" onclick="toggleMonthly()" id="monthlyBtn">แสดงทั้งเดือน</button>
-      <div id="monthly" style="display: none;"></div>
-    </div>
+   
 
     <div class="content">
       <h2>เวลาละหมาด วันนี้ เช็คเวลาอัปเดตล่าสุดตามพิกัดจริงในประเทศไทย</h2>  
@@ -709,8 +748,8 @@
     ];
 
     const prayerNames = {
-      th: ["ซุบฮิ", "ดุห์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
-      en: ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]
+      th: ["ซุบฮิ", "อาทิตย์ขึ้น", "ดุห์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
+      en: ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"]
     };
 
     const select = document.getElementById("province");
@@ -723,6 +762,19 @@
         o.textContent = currentLang === "th" ? p.th : p.en;
         select.appendChild(o);
       });
+      animatePrayerSection();
+    }
+
+    function updateCurrentTime() {
+      const now = new Date();
+
+      const timeStr = now.toLocaleTimeString(
+        currentLang === "th" ? "th-TH" : "en-US",
+        { hour: "2-digit", minute: "2-digit", second: "2-digit" }
+      );
+
+      document.getElementById("currentTime").innerText =
+        (currentLang === "th" ? "เวลาปัจจุบัน: " : "Current Time: ") + timeStr;
     }
 
     function updateTodayDate() {
@@ -787,6 +839,22 @@
       }
     }
 
+    function animatePrayerSection() {
+      const section = document.getElementById("prayerSection");
+      if (!section) return;
+
+      section.classList.remove("fade-update");
+      void section.offsetWidth; // reset animation
+      section.classList.add("fade-update");
+    }
+
+    document.querySelectorAll(".time-value").forEach(el => {
+      el.classList.remove("time-updated");
+      void el.offsetWidth;
+      el.classList.add("time-updated");
+    });
+
+
     function detectLocation() {
       navigator.geolocation.getCurrentPosition(async pos => {
         currentLat = pos.coords.latitude;
@@ -843,15 +911,16 @@
         )
         .then(r => r.json())
         .then(d => {
-          let html = "<table><tr><th>วันที่<br>Date</th><th>ซุบฮี<br>Fajr</th><th>ดุห์รี<br>Dhuhr</th><th>อัสรี<br>Asr</th><th>มัฆริบ<br>Maghrib</th><th>อิชาอ์<br>Isha</th></tr>";
+          let html = "<table><tr><th>วันที่<br>Date</th><th>ซุบฮี<br>Fajr</th><th>อาทิตย์ขึ้น<br>Sunrise</th><th>ดุห์รี<br>Dhuhr</th><th>อัสรี<br>Asr</th><th>มัฆริบ<br>Maghrib</th><th>อิชาอ์<br>Isha</th></tr>";
           d.data.forEach(x => {
             html += `<tr>
 <td>${x.date.gregorian.date}</td>
-<td>${x.timings.Fajr}</td>
-<td>${x.timings.Dhuhr}</td>
-<td>${x.timings.Asr}</td>
-<td>${x.timings.Maghrib}</td>
-<td>${x.timings.Isha}</td>
+<td class="time-value">${x.timings.Fajr.split(" ")[0]}</td>
+<td class="time-value">${x.timings.Sunrise.split(" ")[0]}</td>
+<td class="time-value">${x.timings.Dhuhr.split(" ")[0]}</td>
+<td class="time-value">${x.timings.Asr.split(" ")[0]}</td>
+<td class="time-value">${x.timings.Maghrib.split(" ")[0]}</td>
+<td class="time-value">${x.timings.Isha.split(" ")[0]}</td>
 </tr>`;
           });
           html += "</table>";
@@ -865,7 +934,7 @@
         data.date.hijri.day + " " + data.date.hijri.month.en + " " + data.date.hijri.year;
 
 
-      const times = [data.timings.Fajr, data.timings.Dhuhr, data.timings.Asr, data.timings.Maghrib, data.timings.Isha];
+      const times = [data.timings.Fajr, data.timings.Sunrise, data.timings.Dhuhr, data.timings.Asr, data.timings.Maghrib, data.timings.Isha];
       let now = new Date();
       let nextIndex = 0;
 
@@ -880,7 +949,7 @@
       times.forEach((t, i) => {
         html += `<div class="prayer ${i===nextIndex?"next":""}">
 <div>${prayerNames[currentLang][i]}</div>
-<div>${t}</div>
+<div class="time-value">${t}</div>
 </div>`;
       });
       document.getElementById("prayerTimes").innerHTML = html;
@@ -894,6 +963,8 @@
     } else {
       loadToday(currentLat, currentLng);
     }
+    setInterval(updateCurrentTime, 1000);
+    updateCurrentTime();
   </script>
 
 </body>
