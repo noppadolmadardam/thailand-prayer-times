@@ -286,6 +286,42 @@
         padding: 8px 2px;
       }
     }
+
+    /* ===== Skeleton Loading ===== */
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #e5e7eb;
+      border-radius: 12px;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150px;
+      height: 100%;
+      width: 150px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.6),
+        transparent
+      );
+      animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+      100% {
+        transform: translateX(300px);
+      }
+    }
+
+    .skeleton-line {
+      height: 24px;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 
@@ -425,569 +461,226 @@
 
   </div>
 
-  <script>
-    let currentLang = "th";
-    let currentLat = 13.7563;
-    let currentLng = 100.5018;
+<script>
+  const state = {
+    lang: "th",
+    lat: 13.7563,
+    lng: 100.5018,
+    manualLocation: false
+  };
 
-    const provinces = [{
-        th: "กรุงเทพมหานคร",
-        en: "Bangkok"
-      },
-      {
-        th: "กระบี่",
-        en: "Krabi"
-      },
-      {
-        th: "กาญจนบุรี",
-        en: "Kanchanaburi"
-      },
-      {
-        th: "กาฬสินธุ์",
-        en: "Kalasin"
-      },
-      {
-        th: "กำแพงเพชร",
-        en: "Kamphaeng Phet"
-      },
-      {
-        th: "ขอนแก่น",
-        en: "Khon Kaen"
-      },
-      {
-        th: "จันทบุรี",
-        en: "Chanthaburi"
-      },
-      {
-        th: "ฉะเชิงเทรา",
-        en: "Chachoengsao"
-      },
-      {
-        th: "ชลบุรี",
-        en: "Chonburi"
-      },
-      {
-        th: "ชัยนาท",
-        en: "Chainat"
-      },
-      {
-        th: "ชัยภูมิ",
-        en: "Chaiyaphum"
-      },
-      {
-        th: "ชุมพร",
-        en: "Chumphon"
-      },
-      {
-        th: "เชียงราย",
-        en: "Chiang Rai"
-      },
-      {
-        th: "เชียงใหม่",
-        en: "Chiang Mai"
-      },
-      {
-        th: "ตรัง",
-        en: "Trang"
-      },
-      {
-        th: "ตราด",
-        en: "Trat"
-      },
-      {
-        th: "ตาก",
-        en: "Tak"
-      },
-      {
-        th: "นครนายก",
-        en: "Nakhon Nayok"
-      },
-      {
-        th: "นครปฐม",
-        en: "Nakhon Pathom"
-      },
-      {
-        th: "นครพนม",
-        en: "Nakhon Phanom"
-      },
-      {
-        th: "นครราชสีมา",
-        en: "Nakhon Ratchasima"
-      },
-      {
-        th: "นครศรีธรรมราช",
-        en: "Nakhon Si Thammarat"
-      },
-      {
-        th: "นครสวรรค์",
-        en: "Nakhon Sawan"
-      },
-      {
-        th: "นนทบุรี",
-        en: "Nonthaburi"
-      },
-      {
-        th: "นราธิวาส",
-        en: "Narathiwat"
-      },
-      {
-        th: "น่าน",
-        en: "Nan"
-      },
-      {
-        th: "บึงกาฬ",
-        en: "Bueng Kan"
-      },
-      {
-        th: "บุรีรัมย์",
-        en: "Buriram"
-      },
-      {
-        th: "ปทุมธานี",
-        en: "Pathum Thani"
-      },
-      {
-        th: "ประจวบคีรีขันธ์",
-        en: "Prachuap Khiri Khan"
-      },
-      {
-        th: "ปราจีนบุรี",
-        en: "Prachinburi"
-      },
-      {
-        th: "ปัตตานี",
-        en: "Pattani"
-      },
-      {
-        th: "พระนครศรีอยุธยา",
-        en: "Phra Nakhon Si Ayutthaya"
-      },
-      {
-        th: "พังงา",
-        en: "Phang Nga"
-      },
-      {
-        th: "พัทลุง",
-        en: "Phatthalung"
-      },
-      {
-        th: "พิจิตร",
-        en: "Phichit"
-      },
-      {
-        th: "พิษณุโลก",
-        en: "Phitsanulok"
-      },
-      {
-        th: "เพชรบุรี",
-        en: "Phetchaburi"
-      },
-      {
-        th: "เพชรบูรณ์",
-        en: "Phetchabun"
-      },
-      {
-        th: "แพร่",
-        en: "Phrae"
-      },
-      {
-        th: "พะเยา",
-        en: "Phayao"
-      },
-      {
-        th: "ภูเก็ต",
-        en: "Phuket"
-      },
-      {
-        th: "มหาสารคาม",
-        en: "Maha Sarakham"
-      },
-      {
-        th: "มุกดาหาร",
-        en: "Mukdahan"
-      },
-      {
-        th: "แม่ฮ่องสอน",
-        en: "Mae Hong Son"
-      },
-      {
-        th: "ยโสธร",
-        en: "Yasothon"
-      },
-      {
-        th: "ยะลา",
-        en: "Yala"
-      },
-      {
-        th: "ร้อยเอ็ด",
-        en: "Roi Et"
-      },
-      {
-        th: "ระนอง",
-        en: "Ranong"
-      },
-      {
-        th: "ระยอง",
-        en: "Rayong"
-      },
-      {
-        th: "ราชบุรี",
-        en: "Ratchaburi"
-      },
-      {
-        th: "ลพบุรี",
-        en: "Lopburi"
-      },
-      {
-        th: "ลำปาง",
-        en: "Lampang"
-      },
-      {
-        th: "ลำพูน",
-        en: "Lamphun"
-      },
-      {
-        th: "เลย",
-        en: "Loei"
-      },
-      {
-        th: "ศรีสะเกษ",
-        en: "Si Sa Ket"
-      },
-      {
-        th: "สกลนคร",
-        en: "Sakon Nakhon"
-      },
-      {
-        th: "สงขลา",
-        en: "Songkhla"
-      },
-      {
-        th: "สตูล",
-        en: "Satun"
-      },
-      {
-        th: "สมุทรปราการ",
-        en: "Samut Prakan"
-      },
-      {
-        th: "สมุทรสงคราม",
-        en: "Samut Songkhram"
-      },
-      {
-        th: "สมุทรสาคร",
-        en: "Samut Sakhon"
-      },
-      {
-        th: "สระแก้ว",
-        en: "Sa Kaeo"
-      },
-      {
-        th: "สระบุรี",
-        en: "Saraburi"
-      },
-      {
-        th: "สิงห์บุรี",
-        en: "Singburi"
-      },
-      {
-        th: "สุโขทัย",
-        en: "Sukhothai"
-      },
-      {
-        th: "สุพรรณบุรี",
-        en: "Suphan Buri"
-      },
-      {
-        th: "สุราษฎร์ธานี",
-        en: "Surat Thani"
-      },
-      {
-        th: "สุรินทร์",
-        en: "Surin"
-      },
-      {
-        th: "หนองคาย",
-        en: "Nong Khai"
-      },
-      {
-        th: "หนองบัวลำภู",
-        en: "Nong Bua Lamphu"
-      },
-      {
-        th: "อ่างทอง",
-        en: "Ang Thong"
-      },
-      {
-        th: "อุดรธานี",
-        en: "Udon Thani"
-      },
-      {
-        th: "อุตรดิตถ์",
-        en: "Uttaradit"
-      },
-      {
-        th: "อุทัยธานี",
-        en: "Uthai Thani"
-      },
-      {
-        th: "อุบลราชธานี",
-        en: "Ubon Ratchathani"
-      },
-      {
-        th: "อำนาจเจริญ",
-        en: "Amnat Charoen"
-      }
+  const prayerNames = {
+    th: ["ซุบฮิ", "อาทิตย์ขึ้น", "ดุห์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
+    en: ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"]
+  };
+
+  const select = document.getElementById("province");
+
+  function showSkeletonToday() {
+  let html = "";
+  for (let i = 0; i < 6; i++) {
+    html += `
+      <div class="prayer">
+        <div class="skeleton skeleton-line" style="width:120px;"></div>
+        <div class="skeleton skeleton-line" style="width:70px;"></div>
+      </div>
+    `;
+  }
+  document.getElementById("prayerTimes").innerHTML = html;
+}
+
+  function showSkeletonMonthly() {
+    let html = `<table><tr>
+      <th>Date</th><th>Fajr</th><th>Sunrise</th>
+      <th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th>
+    </tr>`;
+
+    for (let i = 0; i < 5; i++) {
+      html += `<tr>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+        <td><div class="skeleton skeleton-line" style="height:18px;"></div></td>
+      </tr>`;
+    }
+
+    html += "</table>";
+    document.getElementById("monthly").innerHTML = html;
+  }
+
+
+  function todayString() {
+    const d = new Date();
+    return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+  }
+
+  /* ===============================
+    CORE FETCH FUNCTIONS
+  ================================ */
+
+  async function fetchToday(lat, lng) {
+    const res = await fetch(
+      `https://api.aladhan.com/v1/timings/${todayString()}?latitude=${lat}&longitude=${lng}&method=3`
+    );
+    const json = await res.json();
+    return json.data;
+  }
+
+  async function fetchMonthly(lat, lng) {
+    const now = new Date();
+    const res = await fetch(
+      `https://api.aladhan.com/v1/calendar/${now.getFullYear()}/${now.getMonth()+1}?latitude=${lat}&longitude=${lng}&method=3`
+    );
+    const json = await res.json();
+    return json.data;
+  }
+
+  /* ===============================
+    RENDER
+  ================================ */
+
+  function renderToday(data) {
+    document.getElementById("hijriDate").innerText =
+      (state.lang === "th" ? "ตรงกับ " : "Hijri: ") +
+      `${data.date.hijri.day} ${data.date.hijri.month.en} ${data.date.hijri.year}`;
+
+    const times = [
+      data.timings.Fajr,
+      data.timings.Sunrise,
+      data.timings.Dhuhr,
+      data.timings.Asr,
+      data.timings.Maghrib,
+      data.timings.Isha
     ];
 
-    const prayerNames = {
-      th: ["ซุบฮิ", "อาทิตย์ขึ้น", "ดุห์รี", "อัสรี", "มัฆริบ", "อิชาอ์"],
-      en: ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"]
-    };
+    let now = new Date();
+    let nextIndex = -1;
 
-    const select = document.getElementById("province");
-
-    function loadProvinces() {
-      select.innerHTML = "";
-      provinces.forEach(p => {
-        const o = document.createElement("option");
-        o.value = p.en; // ใช้ชื่ออังกฤษยิง API
-        o.textContent = currentLang === "th" ? p.th : p.en;
-        select.appendChild(o);
-      });
-    }
-
-    function updateCurrentTime() {
-      const now = new Date();
-
-      const timeStr = now.toLocaleTimeString(
-        currentLang === "th" ? "th-TH" : "en-US",
-        { hour: "2-digit", minute: "2-digit", second: "2-digit" }
-      );
-
-      document.getElementById("timeLabel").innerText =
-        currentLang === "th" ? "เวลาปัจจุบัน" : "Current Time";
-
-      document.getElementById("timeValue").innerText = timeStr;
-
-    }
-
-    function updateTodayDate() {
-      const now = new Date();
-
-      if (currentLang === "th") {
-        const options = {
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        };
-
-        // ใช้ พ.ศ.
-        const thaiYear = now.getFullYear() + 543;
-
-        const dateStr = now.toLocaleDateString("th-TH", options);
-        const fixedYear = dateStr.replace(now.getFullYear(), thaiYear);
-
-        document.getElementById("todayDate").innerText = fixedYear;
-
-      } else {
-        const options = {
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        };
-
-        document.getElementById("todayDate").innerText =
-          now.toLocaleDateString("en-US", options);
-      }
-    }
-
-    function toggleLang() {
-      currentLang = currentLang === "th" ? "en" : "th";
-
-      document.getElementById("title").innerText =
-        currentLang === "th" ? "เวลาละหมาด วันนี้" : "Today's Prayer Times";
-
-      document.getElementById("langBtn").innerText =
-        currentLang === "th" ? "🇬🇧 อังกฤษ" : "🇹🇭 Thai";
-
-      document.querySelector(".btn-position").innerText =
-        currentLang === "th" ? "📍 ใช้ตำแหน่งปัจจุบัน" : "📍 Use Current Location";
-
-      document.getElementById("monthlyBtn").innerText =
-        currentLang === "th" ? "แสดงเวลาทั้งเดือน" : "Show Monthly Prayer Times";
-
-      loadProvinces();
-      updateTodayDate();
-      loadToday(currentLat, currentLng);
-    }
-
-console.log("CURRENT:", currentLat, currentLng);
-    function toggleMonthly() {
-      const m = document.getElementById("monthly");
-      if (m.style.display === "none") {
-        m.style.display = "block";
-        // loadMonthly(currentLat, currentLng);
-      } else {
-        m.style.display = "none";
-      }
-    }
-
-    function detectLocation() {
-      navigator.geolocation.getCurrentPosition(async pos => {
-        currentLat = pos.coords.latitude;
-        currentLng = pos.coords.longitude;
-
-        loadToday(currentLat, currentLng);
-        loadMonthly(currentLat, currentLng);
-
-        // Reverse Geocoding
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${currentLat}&lon=${currentLng}&format=json`
-          );
-          const data = await res.json();
-
-          let provinceName =
-            data.address.state ||
-            data.address.province ||
-            data.address.region;
-
-          if (provinceName) {
-            // หาใน provinces list
-            const found = provinces.find(p =>
-              provinceName.toLowerCase().includes(p.en.toLowerCase())
-            );
-
-            if (found) {
-              select.value = found.en;
-              fetchByCity(found.en);
-            }
-          }
-
-        } catch (err) {
-          console.log("Location detect error", err);
-        }
-
-      });
-    }
-
-    function fetchByCity(city) {
-      const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const year = today.getFullYear();
-      const dateStr = `${day}-${month}-${year}`;
-      fetch(`https://api.aladhan.com/v1/timingsByCity/${dateStr}?city=${city}&country=Thailand&method=3`)
-        .then(r => r.json())
-        .then(d => {
-          currentLat = d.data.meta.latitude;
-          currentLng = d.data.meta.longitude;
-          displayData(d.data);
-          loadMonthly(currentLat, currentLng);
-        });
-    }
-
-    function loadToday(lat, lng) {
-      const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const year = today.getFullYear();
-      const dateStr = `${day}-${month}-${year}`;
-      console.trace("LOAD TODAY:", lat, lng);
-      fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lng}&method=3`)
-        .then(r => r.json())
-        .then(d => {
-          currentLat = d.data.meta.latitude;
-          currentLng = d.data.meta.longitude;
-          displayData(d.data);
-          loadMonthly(currentLat, currentLng);
-        });
-    }
-
-    function loadMonthly(lat, lng) {
-      console.log("LOAD MONTHLY:", lat, lng);
-      console.trace("LOAD MONTHLY:", lat, lng);
-      const now = new Date();
-      const month = now.getMonth() + 1;
-      const year = now.getFullYear();
-
-      fetch(
-        `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lng}&method=3`
-      )
-        .then(r => r.json())
-        .then(d => {
-
-          if (!d.data) {
-            console.error("API error:", d);
-            return;
-          }
-
-          let html = "<table><tr><th>วันที่<br>Date</th><th>ซุบฮี<br>Fajr</th><th>อาทิตย์ขึ้น<br>Sunrise</th><th>ดุห์รี<br>Dhuhr</th><th>อัสรี<br>Asr</th><th>มัฆริบ<br>Maghrib</th><th>อิชาอ์<br>Isha</th></tr>";
-
-          d.data.forEach(x => {
-            html += `<tr>
-    <td>${x.date.gregorian.date}</td>
-    <td>${x.timings.Fajr.split(" ")[0]}</td>
-    <td>${x.timings.Sunrise.split(" ")[0]}</td>
-    <td>${x.timings.Dhuhr.split(" ")[0]}</td>
-    <td>${x.timings.Asr.split(" ")[0]}</td>
-    <td>${x.timings.Maghrib.split(" ")[0]}</td>
-    <td>${x.timings.Isha.split(" ")[0]}</td>
-    </tr>`;
-          });
-
-          html += "</table>";
-          document.getElementById("monthly").innerHTML = html;
-        })
-        .catch(err => console.error("Fetch failed:", err));
-    }
-
-    function displayData(data) {
-      document.getElementById("hijriDate").innerText =
-        (currentLang === "th" ? "ตรงกับ " : "Hijri: ") +
-        data.date.hijri.day + " " + data.date.hijri.month.en + " " + data.date.hijri.year;
-
-
-      const times = [data.timings.Fajr, data.timings.Sunrise, data.timings.Dhuhr, data.timings.Asr, data.timings.Maghrib, data.timings.Isha];
-      let now = new Date();
-      let nextIndex = 0;
-
-      times.forEach((t, i) => {
-        let [h, m] = t.split(":");
-        let d = new Date();
-        d.setHours(h, m, 0);
-        if (d > now && nextIndex === 0) nextIndex = i;
-      });
-
-      let html = "";
-      times.forEach((t, i) => {
-        html += `<div class="prayer ${i===nextIndex?"next":""}">
-<div>${prayerNames[currentLang][i]}</div>
-<div>${t}</div>
-</div>`;
-      });
-      document.getElementById("prayerTimes").innerHTML = html;
-    }
-
-    loadProvinces();
-    select.value = "Bangkok";
-    select.addEventListener("change", function () {
-      const city = this.value;
-      fetchByCity(city);
+    times.forEach((t, i) => {
+      const [h,m] = t.split(":");
+      const d = new Date();
+      d.setHours(h,m,0);
+      if (d > now && nextIndex === -1) nextIndex = i;
     });
-    updateTodayDate();
-    loadToday(currentLat, currentLng);
-    if (navigator.geolocation) {
-      detectLocation();
-    } else {
-      loadToday(currentLat, currentLng);
+
+    let html = "";
+    times.forEach((t,i)=>{
+      html += `
+        <div class="prayer ${i===nextIndex?'next':''}">
+          <div>${prayerNames[state.lang][i]}</div>
+          <div>${t.split(" ")[0]}</div>
+        </div>`;
+    });
+
+    document.getElementById("prayerTimes").innerHTML = html;
+  }
+
+  function renderMonthly(data) {
+    let html = `<table>
+    <tr>
+      <th>Date</th>
+      <th>Fajr</th>
+      <th>Sunrise</th>
+      <th>Dhuhr</th>
+      <th>Asr</th>
+      <th>Maghrib</th>
+      <th>Isha</th>
+    </tr>`;
+
+    data.forEach(d=>{
+      html += `
+        <tr>
+          <td>${d.date.gregorian.date}</td>
+          <td>${d.timings.Fajr.split(" ")[0]}</td>
+          <td>${d.timings.Sunrise.split(" ")[0]}</td>
+          <td>${d.timings.Dhuhr.split(" ")[0]}</td>
+          <td>${d.timings.Asr.split(" ")[0]}</td>
+          <td>${d.timings.Maghrib.split(" ")[0]}</td>
+          <td>${d.timings.Isha.split(" ")[0]}</td>
+        </tr>`;
+    });
+
+    html += "</table>";
+    document.getElementById("monthly").innerHTML = html;
+  }
+
+  /* ===============================
+    MAIN LOAD
+  ================================ */
+
+  async function loadAll() {
+    try {
+      showSkeletonToday();
+      showSkeletonMonthly();
+
+      const today = await fetchToday(state.lat, state.lng);
+      renderToday(today);
+
+      const monthly = await fetchMonthly(state.lat, state.lng);
+      renderMonthly(monthly);
+
+    } catch (err) {
+      console.error("Load error:", err);
     }
-    setInterval(updateCurrentTime, 1000);
-    updateCurrentTime();
-  </script>
+  }
+
+
+  /* ===============================
+    LOCATION
+  ================================ */
+
+  function detectLocation() {
+    if (state.manualLocation) return;
+
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      state.lat = pos.coords.latitude;
+      state.lng = pos.coords.longitude;
+
+      showSkeletonToday();
+      showSkeletonMonthly();
+
+      loadAll();
+    });
+  }
+
+
+  /* ===============================
+    CITY SELECT
+  ================================ */
+
+  async function fetchByCity(city) {
+    state.manualLocation = true;
+
+    showSkeletonToday();
+    showSkeletonMonthly();
+
+    const res = await fetch(
+      `https://api.aladhan.com/v1/timingsByCity/${todayString()}?city=${city}&country=Thailand&method=3`
+    );
+    const json = await res.json();
+
+    renderToday(json.data);
+
+    const monthly = await fetchMonthly(state.lat, state.lng);
+    renderMonthly(monthly);
+  }
+
+
+  select.addEventListener("change", function(){
+    fetchByCity(this.value);
+  });
+
+  /* ===============================
+    INIT
+  ================================ */
+
+  loadAll();
+  if (navigator.geolocation) detectLocation();
+</script>
+
 
 </body>
 
