@@ -468,7 +468,6 @@
     lang: "th",
     lat: 13.7563,
     lng: 100.5018,
-    // manualLocation: false,
     defaultCity: "Bangkok",
     monthlyLoaded: false
   };
@@ -584,7 +583,7 @@
     // เปลี่ยนข้อความปุ่ม
     btnLang.textContent = state.lang === "th" ? "🇬🇧 English" : "🇹🇭 ไทย";
     btnMonthly.textContent = state.lang === "th" ? "แสดงทั้งเดือน" : "Show Monthly";
-    document.getElementById("title").innerText= state.lang === "th "?"เวลาละหมาดวันนี้":"Today's Prayer Times"; 
+    document.getElementById("title").innerText= state.lang === "th" ? "เวลาละหมาดวันนี้" : "Today's Prayer Times"; 
     document.querySelector(".btn-position").innerText = state.lang === "th" ? "📍 ใช้ตำแหน่งปัจจุบัน" : "📍 Use Current Location";
 
     // รีโหลดข้อมูลใหม่
@@ -890,7 +889,6 @@
  select.addEventListener("change", function () {
   const { lat, lng } = getLatLngFromProvince(this.value);
 
-  // state.manualLocation = true;
   state.lat = lat;      // update lat
   state.lng = lng;      // update lng
 
