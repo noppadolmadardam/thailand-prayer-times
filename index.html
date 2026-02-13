@@ -820,10 +820,6 @@
         currentLang === "th" ? "แสดงเวลาทั้งเดือน" : "Show Monthly Prayer Times";
 
       loadProvinces();
-      select.addEventListener("change", function () {
-        const city = this.value;
-        fetchByCity(city);
-      });
       updateTodayDate();
       loadToday(currentLat, currentLng);
     }
@@ -865,6 +861,7 @@
 
             if (found) {
               select.value = found.en;
+              fetchByCity(found.en);
             }
           }
 
@@ -944,6 +941,7 @@
     }
 
     loadProvinces();
+    select.value = "Bangkok";
     select.addEventListener("change", function () {
       const city = this.value;
       fetchByCity(city);
