@@ -875,7 +875,12 @@ console.log("CURRENT:", currentLat, currentLng);
     }
 
     function fetchByCity(city) {
-      fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Thailand&method=3`)
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const dateStr = `${day}-${month}-${year}`;
+      fetch(`https://api.aladhan.com/v1/timingsByCity/${dateStr}?city=${city}&country=Thailand&method=3`)
         .then(r => r.json())
         .then(d => {
           currentLat = d.data.meta.latitude;
